@@ -4,7 +4,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 # --- CONFIG ---
 # Security Warning: BotFather se naya token lekar yahan paste karein
-BOT_TOKEN = "8729580730:AAGTgZwLyBI4Pe7oeayMDYsrtZ8i6jcPgxM"
+BOT_TOKEN = "
 PHOTO_URL = "https://i.postimg.cc/7YmD0hj0/IMG-20260510-134258.png"
 CHANNEL_ID = "@infohub_salman" 
 UPI_ID = "kingpathan6928@ybl"
