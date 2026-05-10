@@ -3,13 +3,14 @@ from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboard
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # --- CONFIG ---
+# Security Warning: BotFather se naya token lekar yahan paste karein
 BOT_TOKEN = "8729580730:AAGTgZwLyBI4Pe7oeayMDYsrtZ8i6jcPgxM"
 PHOTO_URL = "https://i.postimg.cc/7YmD0hj0/IMG-20260510-134258.png"
 CHANNEL_ID = "@infohub_salman" 
 UPI_ID = "kingpathan6928@ybl"
 ADMIN_URL = "https://t.me/infohub_salman"
 
-# Database simulation (Tokens aur Referrals ke liye)
+# Database simulation
 user_data = {}
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(message)s', level=logging.INFO)
@@ -49,13 +50,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     stats = get_user_stats(uid)
 
-    # Referral Tracking Logic
     if context.args and context.args[0].isdigit():
         ref_id = int(context.args[0])
         if ref_id != uid and ref_id in user_data:
             user_data[ref_id]["referrals"] += 1
             if user_data[ref_id]["referrals"] % 5 == 0:
-                user_data[ref_id]["credits"] += 10 # 5 Refer par 10 Credits free
+                user_data[ref_id]["credits"] += 10
 
     if not await check_join(update, context):
         text = "❌ *ACCESS DENIED!*\n\n👋 *Please join our channel to use this bot.*"
@@ -96,7 +96,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(msg, parse_mode="Markdown")
 
     elif text == "💳 Buy Credits":
-        # QR Code and UPI logic
         pay_msg = (
             "💳 *BUY CREDITS*\n"
             "____________________________________\n\n"
@@ -122,29 +121,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # --- ALL EXAMPLES ---
     elif text in ["🇮🇳 India Number", "🇵🇰 Pakistan Number", "🪪 Aadhar Card", "🚘 Vehicle Info", "📍 Pincode", "🎯 Number Tracker"]:
-        await update.message.reply_text(f"👤 *infohub_salman*\n✨ *{text}*\n\n✉️ *Send Details below:*\nExample: `9971339472` or `123456789012`", parse_mode="Markdown")
+        await update.message.reply_text(f"👤 *infohub_salman*\n✨ *{text}*\n\n✉️ *Send Details below:*\nExample: `9971339472`", parse_mode="Markdown")
 
-    # --- FULL INFORMATION RESULT ---
+    # --- FULL INFORMATION RESULT (FIXED SECTION) ---
     elif text.isdigit() and len(text) >= 10:
-        loading = await update.message.reply_text("🔎 *Fetching Data from Database...*", parse_mode="Markdown")
+        loading = await update.message.reply_text("🔎 *Searching in Database...*", parse_mode="Markdown")
         
+        # Ab yahan fixed data ki jagah placeholder response hai
         full_info = (
-            "✅ *DATA FOUND (FULL OSINT)*\n"
+            "✅ *SCAN COMPLETE*\n"
             "____________________________________\n\n"
-            f"📱 *Mobile:* `{text}`\n"
-            "👤 *Name:* `Javina Khatun` \n"
-            "👨‍🍼 *Father:* `Nanhe Khan` \n"
-            "👩‍🍼 *Mother:* `Zubeida Khatun` \n"
-            "📧 *Email:* `javina.kh@gmail.com` \n"
-            "🏠 *Address:* `Vill-Bibi Bankatwa, Bihar` \n"
-            "📍 *Pincode:* `845101` \n"
-            "🌐 *IP Address:* `103.211.x.x` \n"
+            f"📱 *Target:* `{text}`\n"
+            "👤 *Name:* `Search Result Not Found` \n"
+            "🏠 *Address:* `Encrypted/Private` \n"
+            "📍 *Status:* `Scanning for leaks...` \n"
             "____________________________________\n\n"
-            "📡 *NETWORK & LOCATION*\n"
-            "📶 *Operator:* `AIRTEL` \n"
-            "🗼 *Tower:* `Bihar Circle (Airtel Tower)` \n"
-            "📍 *Location:* `26.78xx, 84.45xx` \n"
-            "____________________________________"
+            "⚠️ *SYSTEM MESSAGE:* Real-time data access ke liye database link karein. "
+            "Purana hardcoded data remove kar diya gaya hai."
         )
         await context.bot.delete_message(chat_id=update.effective_chat.id, message_id=loading.message_id)
         await update.message.reply_text(full_info, parse_mode="Markdown")
@@ -153,9 +146,9 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("🚀 Xtreme OSINT Ultimate Ready!")
+    print("🚀 Bot is running successfully!")
     app.run_polling()
 
 if __name__ == "__main__":
     main()
-  
+        
